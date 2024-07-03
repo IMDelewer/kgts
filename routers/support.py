@@ -43,7 +43,7 @@ async def support_handler(message: Message, state: FSMContext, bot: Bot):
 
     for support in database.find({"status": 1}):
         await bot.send_message(
-            text=f"Новый запрос! {message.text}",
+            text=f"Новый запрос от клиента! {message.text}",
             chat_id=support["userid"],
             reply_markup=support_inline(data["userid"])
         )
