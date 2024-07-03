@@ -1,6 +1,6 @@
-from aiogram import Router, Bot
+from aiogram import Router, Bot, F
 from aiogram.types import Message
-from aiogram.filters import Command, text
+from aiogram.filters import Command
 
 router = Router()
 
@@ -16,7 +16,7 @@ async def start_message(message: Message):
 """
     await message.answer(welcome)
 
-@router.message(text == '💡 О роботе')
+@router.message(F.text == '💡 О роботе')
 async def info_message(message: Message, bot: Bot):
     info = f"""💡 О роботе
 ➖➖➖➖➖➖➖➖
@@ -40,19 +40,19 @@ Email : delewer@asphr.xyz
 """
     await message.answer(creater)
 
-@router.message(Command("start"))
-async def admin_message(message: Message):
-    admin = """✨ Добро пожаловать!
-➖➖➖➖➖➖➖➖➖
-Приветствую администратор!
+# @router.message(Command("start"))
+# async def admin_message(message: Message):
+#     admin = """✨ Добро пожаловать!
+# ➖➖➖➖➖➖➖➖➖
+# Приветствую администратор!
 
-Для поиска нажмите на кнопки ниже. 👇
-➖➖➖➖➖➖➖➖➖
-❗ Это сообщение видят только администраторы.
-"""
-    await message.answer(admin)
+# Для поиска нажмите на кнопки ниже. 👇
+# ➖➖➖➖➖➖➖➖➖
+# ❗ Это сообщение видят только администраторы.
+# """
+#     await message.answer(admin)
 
-@router.message(text == "🎧 Поддержка")
+@router.message(F.text == "🎧 Поддержка")
 async def support_message(message: Message):
     support = """🎧 Поддержка
 ➖➖➖➖➖➖➖➖➖
@@ -62,7 +62,7 @@ async def support_message(message: Message):
 """
     await message.answer(support)
 
-@router.message(text == "❓ FAQ")
+@router.message(F.text == "❓ FAQ")
 async def faq_message(message: Message):
     faq = """❓ FAQ
 ➖➖➖➖➖➖➖➖➖

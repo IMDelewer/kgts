@@ -1,13 +1,11 @@
-from aiogram import Dispatcher
-from aiogram.types import Message
-from aiogram.dispatcher.filters import BoundFilter
+from aiogram.filters import BaseFilter
+from aiogram import types, Dispatcher
 
-from data import admins
+from data import Config
 
-class IsAdmin(BoundFilter):
+class IsAdmin(BaseFilter):
+    async def __call__(self, message: types.Message) -> bool:
+        return message.from_user.id in Config.admins
 
-    async def check(self, message: Message):
-        return message.from_user.id in admins
-
-def reg_filters(dp: Dispatcher):
+def register_filters(dp: Dispatcher):
     dp.filters_factory.bind(IsAdmin)

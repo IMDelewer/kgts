@@ -23,8 +23,7 @@ async def start_handler(message: types.Message, bot: Bot):
         database.insert(data)
     await message.answer(reply_markup=main_reply())
 
-@is_admin()
-@router.message(Command("start"))
+@router.message(Command("start"), is_admin=True)
 async def admin_handler(message: types.Message):
 
     await message.answer(reply_markup=admin_reply())
