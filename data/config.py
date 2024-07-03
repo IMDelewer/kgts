@@ -1,7 +1,7 @@
 class Config:
 
     admins = [
-        ""
+        "566599719"
     ]
 
     token = "7081466134:AAEa6kK6FYt6G1wm_UCdIBQWlIi9rWoKnP4"

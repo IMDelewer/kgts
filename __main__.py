@@ -27,7 +27,6 @@ async def main():
     dp.shutdown.register(bot.on_shutdown)
 
     setup_routers(dp, logger)
-    register_filters(dp)
 
     await dp.start_polling(bot)
 
