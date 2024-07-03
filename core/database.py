@@ -60,7 +60,7 @@ class Database(MongoClient):
 
         for collection in collections_to_check:
             if collection not in existing_collections:
-                self.logger.warn(f"{collection} not found. Creating...")
+                self.logger.error(f"{collection} not found. Creating...")
                 self.create_collection(collection)
                 self.logger.debug(f"Collection {collection} created!")
             else:
