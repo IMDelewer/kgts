@@ -30,7 +30,8 @@ async def support_handler(message: Message, state: FSMContext, bot: Bot):
         "status": "opened",
         "sup_name": None
     }
-    await state.finish()
+    await state.clear()
+    database.use_collection("supports")
     database.insert(data)
     database.use_collection("users")
 
@@ -80,4 +81,4 @@ async def support_accept_reject_handler(callback: CallbackQuery, state: FSMConte
 async def support_answer_handler(message: Message, state: FSMContext, bot: Bot):
     # Логика ответа на запрос поддержки
     await message.answer("Ваш ответ записан.")
-    await state.finish()
+    await state.clear()

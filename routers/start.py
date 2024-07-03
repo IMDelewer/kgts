@@ -2,7 +2,7 @@ from aiogram import Router, Bot, types
 from aiogram.filters import Command 
 
 from keyboards import main_reply, admin_reply
-
+from core import IsAdmin
 router = Router()
 
 @router.message(Command("start"))
@@ -23,7 +23,7 @@ async def start_handler(message: types.Message, bot: Bot):
         database.insert(data)
     await message.answer(reply_markup=main_reply())
 
-@router.message(Command("start"), is_admin=True)
+@router.message(IsAdmin(), Command("start"))
 async def admin_handler(message: types.Message):
 
     await message.answer(reply_markup=admin_reply())

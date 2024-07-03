@@ -2,6 +2,8 @@ from aiogram import Router, Bot, F
 from aiogram.types import Message
 from aiogram.filters import Command
 
+from core import IsAdmin
+
 router = Router()
 
 @router.message(Command("start"))
@@ -40,17 +42,17 @@ Email : delewer@asphr.xyz
 """
     await message.answer(creater)
 
-# @router.message(Command("start"))
-# async def admin_message(message: Message):
-#     admin = """✨ Добро пожаловать!
-# ➖➖➖➖➖➖➖➖➖
-# Приветствую администратор!
+@router.message(IsAdmin(), Command("start"))
+async def admin_message(message: Message):
+    admin = """✨ Добро пожаловать!
+➖➖➖➖➖➖➖➖➖
+Приветствую администратор!
 
-# Для поиска нажмите на кнопки ниже. 👇
-# ➖➖➖➖➖➖➖➖➖
-# ❗ Это сообщение видят только администраторы.
-# """
-#     await message.answer(admin)
+Для поиска нажмите на кнопки ниже. 👇
+➖➖➖➖➖➖➖➖➖
+❗ Это сообщение видят только администраторы.
+"""
+    await message.answer(admin)
 
 @router.message(F.text == "🎧 Поддержка")
 async def support_message(message: Message):
