@@ -16,8 +16,6 @@ class Database():
         self.db = client[Config.db_name]
 
         self.current_collection = current_collection
-        
-        self.__enter__()
     
 
     def use_collection(self, collection_name):
@@ -64,27 +62,21 @@ class User(Database):
         user_id:int,
         first_name:str,
         second_name:str,
-        phone_number:str | None = None,
         access_lvl:int | None = None,
-        
-        db_name: str | None = None,
-        uri: str | None = None,
         **kwargs
     ):
 
         self.collection = collection
 
-        self.username: username
-        self.user_id: user_id
-
-        self.phone_number = phone_number
+        self.username = username
+        self.user_id = user_id
 
         self.first_name = first_name
         self.second_name = second_name
 
         self.access_lvl = access_lvl
                 
-        super().__init__(db_name, uri, **kwargs)
+        super().__init__(current_collection=collection, **kwargs)
 
 
 
@@ -94,16 +86,18 @@ class User(Database):
         
         if not db.find_one({"userid": self.user_id}):
 
+            
             base = NewUser(
                 username = self.username,
                 user_id = self.user_id,
-                phone_number = self.phone_number,
                 first_name = self.first_name,
                 second_name = self.second_name,
-                access_lvl = self.acces_lvl
             )
 
             dump_base = base.model_dump()
+
+            if self.access_lvl != None:      
+                dump_base['access_lvl'] = self.access_lvl
             
             db.insert_one(dump_base)
         else:
