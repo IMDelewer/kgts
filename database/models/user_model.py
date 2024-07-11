@@ -14,7 +14,7 @@ class NewUser(BaseModel):
     first_name: str
     second_name: str | None = None
 
-    access_lvl: int = 
+    access_lvl: int = 1
 
     
 
