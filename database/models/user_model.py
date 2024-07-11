@@ -4,9 +4,7 @@ from pydantic import BaseModel
 
 
 
-class user(BaseModel):
-
-    _id: int
+class NewUser(BaseModel):
 
     username: str
     user_id: int
@@ -16,7 +14,7 @@ class user(BaseModel):
     first_name: str
     second_name: str
 
-    acces_lvl: int = 0
+    access_lvl: int = 0
 
     
 

@@ -25,7 +25,6 @@ class Logger:
         self.time_format = time_format
         self.log_file = log_file
 
-        self.debug("Logger Started!")
 
     def get_time(self):
         return datetime.datetime.now().strftime(self.time_format)

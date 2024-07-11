@@ -1,22 +1,24 @@
 from pymongo import MongoClient
 from typing import Optional
-from data import set_logger
+from data import set_logger, Config
 
-class Database(MongoClient):
+from .models import NewUser
+from json import dumps
 
-    def __init__(
-        self, 
-        db_name: Optional[str] = None,
-        uri: Optional[str] = None, 
-        **kwargs
-    ):  
-        super().__init__(uri, **kwargs)
+class Database():
+
+    def __init__(self, current_collection, **kwargs): 
+
         self.logger = set_logger(process_name="Database", log_path="data/logs.log")
-        self.db_name = db_name
-        self.db = self[db_name]
-        self.current_collection = None
+
+        client = MongoClient(Config.url)
+    
+        self.db = client[Config.db_name]
+
+        self.current_collection = current_collection
         
         self.__enter__()
+    
 
     def use_collection(self, collection_name):
         """Устанавливаем текущую коллекцию."""
@@ -57,16 +59,20 @@ class User(Database):
 
     def __init__(
         self,
+        collection:str,
         username:str,
         user_id:int,
-        phone_number:str,
         first_name:str,
+        second_name:str,
+        phone_number:str | None = None,
+        access_lvl:int | None = None,
+        
         db_name: str | None = None,
         uri: str | None = None,
         **kwargs
     ):
 
-        self._id:int
+        self.collection = collection
 
         self.username: username
         self.user_id: user_id
@@ -74,13 +80,31 @@ class User(Database):
         self.phone_number = phone_number
 
         self.first_name = first_name
-        self.second_name: str
+        self.second_name = second_name
 
-        self.acces_lvl: int = 0
+        self.access_lvl = access_lvl
                 
         super().__init__(db_name, uri, **kwargs)
 
 
 
-    async def insert(self, data):
-        return super().insert(data)
+    async def insert(self):
+
+        db = self.db[self.collection]
+        
+        if not db.find_one({"userid": self.user_id}):
+
+            base = NewUser(
+                username = self.username,
+                user_id = self.user_id,
+                phone_number = self.phone_number,
+                first_name = self.first_name,
+                second_name = self.second_name,
+                access_lvl = self.acces_lvl
+            )
+
+            dump_base = base.model_dump()
+            
+            db.insert_one(dump_base)
+        else:
+            pass

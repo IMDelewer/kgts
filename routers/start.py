@@ -4,42 +4,24 @@ from aiogram.filters import Command
 from keyboards import main_reply, admin_reply
 from data import Config
 
+from database.database import User
+
 router = Router()
 
 @router.message(Command(commands="start"))
 async def start_handler(message: types.Message, bot: Bot):
-    if message.from_user.id not in Config.admins:
-        welcome = """✨ Добро пожаловать!
-➖➖➖➖➖➖➖➖➖
-Вас приветствует телеграмм бот ОАО КГТС!
 
-Если хотите получить помощь от опертатора 🎧,
-нажмите на кнопку "🎧 Поддержка" ниже.👇
-➖➖➖➖➖➖➖➖➖"""
-
-        database = bot.db
-        database.use_collection("users")
-        if database.find({"userid": message.from_user.id}):
-            pass
-        else:
-            data = {
-                "username": message.from_user.username,
-                "first_name": message.from_user.first_name,
-                "second_name": message.from_user.last_name,
-                "userid": message.from_user.id,
-                "chatid": f"{message.chat.id}",
-                "level": 0,
-                "is_prem": message.from_user.is_premium,
-                
-            }
-            database.insert(data)
-        await message.answer(welcome, reply_markup=main_reply())
-    elif message.from_user.id in Config.admins:
-        admin = """✨ Добро пожаловать!
-➖➖➖➖➖➖➖➖➖
-Приветствую администратор!
-
-Для поиска нажмите на кнопки ниже. 👇
-➖➖➖➖➖➖➖➖➖
-❗ Это сообщение видят только администраторы."""
-    await message.answer(text=admin, reply_markup=admin_reply())
+    user = bot.user(
+            collection = 'users',
+            username = message.from_user.username,
+            user_id = message.from_user.id,
+            phone_number = None,
+            first_name = message.from_user.first_name,
+            second_name =  message.from_user.last_name,
+            access_lvl = 0,
+        )
+    
+    try:
+        await user.insert()
+    except Exception as e:
+        await message.answer(text=e, reply_markup=admin_reply())

@@ -4,12 +4,13 @@ import asyncio
 from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from core import *
+from database.database import Database, User
+from core import DelBot
 from data import *
 from routers import setup_routers
 
 async def main():
-    db = Database(db_name="kgts", uri="mongodb+srv://imdelwer:QJTz12cArDZoNiBi@tester.shecthy.mongodb.net/?retryWrites=true&w=majority&appName=tester")
+    db = Database()
     logger : Logger = set_logger("KgtsBot", log_path="data/logs.log")
 
     dp = Dispatcher(storage=MemoryStorage())
@@ -19,7 +20,7 @@ async def main():
         database = db,
         logger = logger,
         dp = dp,
-        helper = Helper,
+        user = User,
     )
 
     dp.startup.register(bot.on_startup)
