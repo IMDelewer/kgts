@@ -10,10 +10,9 @@ from routers import setup_routers
 
 async def main():
     db = Database(db_name="kgts", uri="mongodb+srv://imdelwer:QJTz12cArDZoNiBi@tester.shecthy.mongodb.net/?retryWrites=true&w=majority&appName=tester")
-    logger : Logger = set_logger("KgtsBot")
+    logger : Logger = set_logger("KgtsBot", log_path="data/logs.log")
 
-    storage = MemoryStorage()
-    dp = Dispatcher(storage=storage)
+    dp = Dispatcher(storage=MemoryStorage())
 
     bot = DelBot(
         config = Config,
@@ -26,7 +25,7 @@ async def main():
     dp.startup.register(bot.on_startup)
     dp.shutdown.register(bot.on_shutdown)
 
-    setup_routers(dp, logger)
+    setup_routers(dp)
 
     await dp.start_polling(bot)
 

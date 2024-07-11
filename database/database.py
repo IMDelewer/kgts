@@ -16,7 +16,6 @@ class Database(MongoClient):
         self.db = self[db_name]
         self.current_collection = None
         
-        self.checker()
         self.__enter__()
 
     def use_collection(self, collection_name):
@@ -53,15 +52,35 @@ class Database(MongoClient):
         if self.logger:
             self.logger.info("Connection closed")
 
-    def checker(self):
-        collections_to_check = ['users', 'supports']
 
-        existing_collections = self.db.list_collection_names()
+class User(Database):
 
-        for collection in collections_to_check:
-            if collection not in existing_collections:
-                self.logger.error(f"{collection} not found. Creating...")
-                self.create_collection(collection)
-                self.logger.debug(f"Collection {collection} created!")
-            else:
-                self.logger.debug (f"{collection} was found!")
+    def __init__(
+        self,
+        username:str,
+        user_id:int,
+        phone_number:str,
+        first_name:str,
+        db_name: str | None = None,
+        uri: str | None = None,
+        **kwargs
+    ):
+
+        self._id:int
+
+        self.username: username
+        self.user_id: user_id
+
+        self.phone_number = phone_number
+
+        self.first_name = first_name
+        self.second_name: str
+
+        self.acces_lvl: int = 0
+                
+        super().__init__(db_name, uri, **kwargs)
+
+
+
+    async def insert(self, data):
+        return super().insert(data)

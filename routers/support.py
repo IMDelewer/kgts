@@ -41,10 +41,12 @@ async def support_handler(message: Message, state: FSMContext, bot: Bot):
     database.insert(data)
     database.use_collection("users")
 
-    for support in database.find({"status": 1}):
+    for support in database.find({"level": 1})["chatid"]:
+        support = int(support)
+        chat = await bot.get_chat(support)
         await bot.send_message(
             text=f"Новый запрос от клиента! {message.text}",
-            chat_id=support["userid"],
+            chat_id=chat.id,
             reply_markup=support_inline(data["userid"])
         )
 
@@ -54,11 +56,11 @@ async def support_accept_reject_handler(callback: CallbackQuery, state: FSMConte
     database = bot.db
     if data[0] == "reject":
         database.use_collection("supports")
-        support = database.find_one({"userid": int(data[1])})
+        support = database.find({"userid": int(data[1])})
         if support and support["operid"] == 0:
             if support["cancels"] < 4:
                 if callback.from_user.id not in support["cancel_ids"]:
-                    database.update_one(
+                    database.insert(
                         {"userid": int(data[1])},
                         {"$inc": {"cancels": 1}, "$push": {"cancel_ids": callback.from_user.id}}
                     )
@@ -69,11 +71,11 @@ async def support_accept_reject_handler(callback: CallbackQuery, state: FSMConte
                 await callback.answer("Вы не можете отклонить этот запрос.")
         else:
             await callback.answer("Похоже, этот запрос уже приняли.")
-    else:
+    elif data[0] == "accept":
         database.use_collection("supports")
-        support = database.find_one({"userid": int(data[1])})
+        support = database.find({"userid": int(data[1])})
         if support and support["operid"] == 0:
-            database.update_one(
+            database.insert(
                 {"userid": int(data[1])},
                 {"$set": {"operid": callback.from_user.id, "status": "accepted"}}
             )
