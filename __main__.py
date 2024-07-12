@@ -4,7 +4,7 @@ import asyncio
 from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from database.database import Database, User
+from database.database import Database, User, Support
 from core import DelBot
 from data import *
 from routers import setup_routers
@@ -21,6 +21,7 @@ async def main():
         logger = logger,
         dp = dp,
         user = User,
+        support = Support,
     )
 
     dp.startup.register(bot.on_startup)

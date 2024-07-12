@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 
 from data import *
-from database.database import Database, User
+from database.database import Database, User, Support
 
 class DelBot(Bot):
     def __init__(
@@ -12,6 +12,7 @@ class DelBot(Bot):
         database : Database,
         dp : Dispatcher,
         user : User,
+        support : Support,
         **kwargs
         ):
 
@@ -20,6 +21,7 @@ class DelBot(Bot):
         self.db = database
         self.dp = dp
         self.user = user
+        self.support = support
 
         super().__init__(self.config.token, **kwargs)
     
