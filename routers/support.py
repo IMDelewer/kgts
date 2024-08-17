@@ -6,7 +6,11 @@ from aiogram.filters import StateFilter
 
 from keyboards import support_inline
 
+from database import Database
+
 router = Router()
+
+database = Database(current_collection='supports')
 
 class Wait(StatesGroup):
     waiting_message = State()
@@ -25,30 +29,23 @@ async def support_wait(message: Message, state: FSMContext):
 
 @router.message(StateFilter(Wait.waiting_message))
 async def support_handler(message: Message, state: FSMContext, bot: Bot):
-    database = bot.db
-    data = {
-        "request": message.text,
-        "userid": message.from_user.id,
-        "operid": 0,
-        "rate": 0,
-        "cancels": 0,
-        "cancel_ids": [],
-        "status": "opened",
-        "sup_name": None
-    }
-    await state.clear()
-    database.use_collection("supports")
-    database.insert(data)
-    database.use_collection("users")
 
-    for support in database.find({"level": 1})["chatid"]:
-        support = int(support)
-        chat = await bot.get_chat(support)
-        await bot.send_message(
-            text=f"Новый запрос от клиента! {message.text}",
-            chat_id=chat.id,
-            reply_markup=support_inline(data["userid"])
-        )
+    support = bot.support(
+        collection = 'supports',
+        request = message.text,
+        userid = message.from_user.id,
+        operid = 0,
+        rate = 0,
+        cancels = 0,
+        cancel_ids = [],
+        status = "opened",
+        support_name = None
+    )
+    await support.insert()
+    
+    await state.clear()
+
+    config = bot.Config
 
 @router.callback_query()
 async def support_accept_reject_handler(callback: CallbackQuery, state: FSMContext, bot: Bot):

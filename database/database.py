@@ -14,33 +14,11 @@ class Database:
         self.current_collection = self.db[current_collection]
     
 
-    def use_collection(self, collection_name):
-        """Устанавливаем текущую коллекцию."""
-        self.current_collection = self.db[collection_name]
-
-    def create_collection(self, collection_name):
-        """Создаём новую коллекцию в указанной базе данных."""
-        self.db.create_collection(collection_name)
-
-    def drop_collection(self, collection_name):
-        """Удаляем коллекцию из указанной базы данных."""
-        self.db.drop_collection(collection_name)
-
-    def find(self, query):
-        """Находим документы в текущей коллекции по запросу."""
-        return self.current_collection.find_one(query)
-
-    def delete(self, query):
-        """Удаляем документы из текущей коллекции по запросу."""
-        return self.current_collection.delete_many(query)
-
-    def insert(self, data):
-        """Вставляем или обновляем документы в текущей коллекции."""
-        return self.current_collection.insert_one(data)
-
-    def update(self, query, new_data):
-        """Обновляем документы в текущей коллекции по запросу."""
-        return self.current_collection.update_one(query, {'$set': new_data})
+    def find(self, filter, value, collection):
+        
+        db = self.db[collection].find_one({filter:value})
+        
+        return db   
 
     def __enter__(self):
         if self.logger:
@@ -94,13 +72,6 @@ class User(Database):
         else:
             pass
 
-    async def find(self, query: Dict[str, Any]):
-        db = self.db[self.collection]
-
-        user = db.find_one(query)
-
-        return user
-
     async def delete(self, query: Dict[str, Any]):
         db = self.db[self.collection]
 
@@ -112,6 +83,13 @@ class User(Database):
         db = self.db[self.collection]
 
         user = db.update_one(query, {'$set': new_data})
+
+        return user
+
+    async def find(self, query):
+        db = self.db[self.collection]
+
+        user = db.find_one(query)
 
         return user
     
@@ -127,7 +105,7 @@ class Support(Database):
         operid: int,
         rate: int,
         cancels: int,
-        cancel_ids: List[int],
+        cancel_ids: list[int],
         **kwargs
     ):
         self.collection = collection
@@ -158,13 +136,7 @@ class Support(Database):
             
         support = db.insert_one(dump_base)
 
-        return support
-    async def find(self, query: Dict[str, Any]):
-        db = self.db[self.collection]
-
-        support = db.find_one(query)
-
-        return support
+        return support  
 
     async def delete(self, query: Dict[str, Any]):
         db = self.db[self.collection]
@@ -177,5 +149,12 @@ class Support(Database):
         db = self.db[self.collection]
 
         support = db.update_one(query, {'$set': new_data})
+
+        return support
+    
+    async def find(self, query):
+        db = self.db[self.collection]
+
+        support = db.find_one(query)
 
         return support

@@ -9,8 +9,8 @@ class DelBot(Bot):
         self, 
         config : Config, 
         logger : Logger, 
-        database : Database,
         dp : Dispatcher,
+        database: Database,
         user : User,
         support : Support,
         **kwargs
@@ -18,8 +18,8 @@ class DelBot(Bot):
 
         self.config = config
         self.logger = logger
-        self.db = database
         self.dp = dp
+        self.db = database
         self.user = user
         self.support = support
 

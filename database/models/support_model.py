@@ -7,13 +7,13 @@ from typing import List
 class NewSupport(BaseModel):
 
     request: str
-    status: str
-    support_name: str
+    status: str = 'opened'
+    support_name: str | None = None
 
     userid: int
-    operid: int
+    operid: int = 0
     
-    rate: int
+    rate: int = 0
 
-    cancels: int
-    cancel_ids: List[int]
+    cancels: int = 0
+    cancel_ids: list[int] = []

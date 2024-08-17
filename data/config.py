@@ -10,3 +10,4 @@ class Config:
     url = "mongodb+srv://imdelwer:QJTz12cArDZoNiBi@tester.shecthy.mongodb.net/?retryWrites=true&w=majority&appName=tester"
 
     version = "TESTING-0.1.9"
+    github = "https://github.com/IMDelewer/kgts"

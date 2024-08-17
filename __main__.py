@@ -10,7 +10,7 @@ from data import *
 from routers import setup_routers
 
 async def main():
-    db = Database(current_collection='info')
+    db = Database(current_collection="info")
     logger : Logger = set_logger("KgtsBot", log_path="data/logs.log")
 
     dp = Dispatcher(storage=MemoryStorage())

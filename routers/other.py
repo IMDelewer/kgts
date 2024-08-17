@@ -12,6 +12,7 @@ async def info_message(message: Message, bot: Bot):
 Это оффициальный бот поддержки созданный для ОАО "КГТС" 
 ТГ Создателей : @imdelewer
 Версия : {bot.config.version}
+Этот бот Open Source : {bot.config.github}
 ➖➖➖➖➖➖➖➖
 """
     await message.answer(info)
