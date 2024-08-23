@@ -1,9 +1,5 @@
 from pydantic import BaseModel
 
-
-
-
-
 class NewUser(BaseModel):
 
     username: str
@@ -15,7 +11,3 @@ class NewUser(BaseModel):
     second_name: str | None = None
 
     access_lvl: int = 1
-
-    
-
-

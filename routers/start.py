@@ -1,7 +1,7 @@
 from aiogram import Router, Bot, types, F
 from aiogram.filters import Command 
 
-from keyboards import main_reply, admin_reply
+from keyboards import main_reply #admin_reply
 from data import Config
 
 from database.database import User
@@ -16,18 +16,18 @@ welcome = """✨ Добро пожаловать!
 нажмите на кнопку "🎧 Поддержка" ниже.👇
 ➖➖➖➖➖➖➖➖➖"""
 
-admin = """✨ Добро пожаловать!
-➖➖➖➖➖➖➖➖➖
-Приветствую администратор!
+# admin = """✨ Добро пожаловать!
+# ➖➖➖➖➖➖➖➖➖
+# Приветствую администратор!
 
-Для поиска нажмите на кнопки ниже. 👇
-➖➖➖➖➖➖➖➖➖
-❗ Это сообщение видят только администраторы."""
+# Для поиска нажмите на кнопки ниже. 👇
+# ➖➖➖➖➖➖➖➖➖
+# ❗ Это сообщение видят только администраторы."""
 
 @router.message(Command(commands="start"))
 async def start_handler(message: types.Message, bot: Bot):
 
-    if message.from_user.id not in Config.admins:
+    #if message.from_user.id not in Config.admins:
         user = bot.user(
                 collection = 'users',
                 username = message.from_user.username,
@@ -40,5 +40,5 @@ async def start_handler(message: types.Message, bot: Bot):
 
         await message.answer(welcome, reply_markup=main_reply())
 
-    elif message.from_user.id in Config.admins:
-        await message.answer(admin, reply_markup=admin_reply())
+    # elif message.from_user.id in Config.admins:
+    #     await message.answer(admin, reply_markup=admin_reply())

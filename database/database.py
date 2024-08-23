@@ -40,6 +40,7 @@ class User(Database):
         first_name: str,
         second_name: str,
         access_lvl: Optional[int] = None,
+
         **kwargs
     ):
         self.collection = collection
