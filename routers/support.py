@@ -29,12 +29,12 @@ async def support_wait(message: Message, state: FSMContext):
     await sleep(5)
     support = """🎧 Поддержка
 ➖➖➖➖➖➖➖➖➖
-Задайте ваш вопрос ❓.
-В ближайшее время оператор ответит Вам 🎧.
+Упс. Эта функцию пока не работает.
+Но скоро появиться
 ➖➖➖➖➖➖➖➖➖
 """
     await message.answer(support)
-    await state.set_state(Wait.waiting_message)
+#   await state.set_state(Wait.waiting_message)
 
 #а кто тут новые функции сливает?
 @router.message(StateFilter(Wait.waiting_message))
