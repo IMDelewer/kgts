@@ -19,7 +19,7 @@ def find_similar_text(df, search_text):
     choices = df['A'].tolist()
     best_match, score = process.extractOne(search_text, choices)
 
-    if score > 70:
+    if score > 80:
         matching_row = df[df['A'] == best_match]
         return matching_row['B'].values[0]
     else:
