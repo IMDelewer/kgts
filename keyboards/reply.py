@@ -1,23 +1,17 @@
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-def main_reply():
+def build_reply_keyboard(buttons, adjust_count):
+    """Создание клавиатуры с заданными кнопками и настройками."""
     builder = ReplyKeyboardBuilder()
-    
-    builder.button(text="🎧 Поддержка")
-    builder.button(text="❓ FAQ")
-    builder.button(text="💡 О роботе")
-
-    builder.adjust(1, 3)
+    for button in buttons:
+        builder.button(text=button)
+    builder.adjust(*adjust_count)
     return builder.as_markup(resize_keyboard=True)
 
-# def admin_reply():
-#     builder = ReplyKeyboardBuilder()
-    
-#     builder.button(text="🎧 Поддержка")
-#     builder.button(text="🔍 Поиск юзера")
-#     builder.button(text="🔍 Поиск поддержки")
-#     builder.button(text="🔍 Поиск записи")
-#     builder.button(text="📊 Статистика")
+def main_reply():
+    buttons = ["🎧 Поддержка", "❓ FAQ", "💡 О роботе"]
+    return build_reply_keyboard(buttons, adjust_count=(1, 3))
 
-#     builder.adjust(1, 3)
-#     return builder.as_markup(resize_keyboard=True)
+def admin_reply():
+    buttons = ["🎧 Поддержка", "🔍 Поиск юзера", "🔍 Поиск поддержки", "📊 Статистика"]
+    return build_reply_keyboard(buttons, adjust_count=(1, 2))

@@ -1,8 +1,9 @@
 from aiogram import Bot, Dispatcher
 from aiogram.types import Update
+from aiogram.client.default import DefaultBotProperties
 
 from data import *
-from database.database import Database, User, Support
+from .database import Database
 
 class DelBot(Bot):
     def __init__(
@@ -11,8 +12,6 @@ class DelBot(Bot):
         logger : Logger, 
         dp : Dispatcher,
         database: Database,
-        user : User,
-        support : Support,
         **kwargs
         ):
 
@@ -20,10 +19,12 @@ class DelBot(Bot):
         self.logger = logger
         self.dp = dp
         self.db = database
-        self.user = user
-        self.support = support
 
-        super().__init__(self.config.token, **kwargs)
+        super().__init__(
+            self.config.token, 
+            default=DefaultBotProperties(parse_mode="MarkdownV2"),
+            **kwargs
+        )
     
     async def on_startup(self):
         self.logger.start(f"Bot Started! Version : {self.config.version}")
