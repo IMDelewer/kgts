@@ -44,7 +44,7 @@ async def check_user_subscription(message: Message, bot: Bot, user_level: int):
     db.use_collection("users")
 
     if user_level == 0:
-        user_status = await bot.get_chat_member(chat_id='-1002192731130', user_id=message.from_user.id)
+        user_status = await bot.get_chat_member(chat_id='-10001547521398', user_id=message.from_user.id)
         if user_status.status != 'left':
             db.update({"user_id": message.from_user.id}, {"level": 1})
             await message.answer("✔ Вы подписаны\! Пропишите /start")

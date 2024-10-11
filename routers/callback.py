@@ -57,7 +57,7 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
             db = bot.db
             db.use_collection("users")
 
-            user_status = await bot.get_chat_member(chat_id='-1002192731130', user_id=id)
+            user_status = await bot.get_chat_member(chat_id='-10001547521398', user_id=id)
             if user_status.status != 'left':
                 db.update({"user_id": id}, {"level": 1})
                 await callback.answer("✔ Вы подписаны\! Пропишите /start")
