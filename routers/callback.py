@@ -155,12 +155,15 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
             db.use_collection("supports")
             support_data = db.find({"id": id})
             support_list = list(support_data)
+            support = support_list[0]
 
-            if support_list:
-                support = support_list[0]
-                db.update({"user_id": support.get("operid")}, {
-                    "all_rate": support.get("all_rate", 0) + 1,
-                    f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": support.get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
+            user_data = db.find({"user_id": support.get("operid")})
+            user_list = list(user_data)
+            if user_list:
+                user = user_list[0]
+                db.update({"user_id": user.get("user_id")}, {
+                    "all_rate": user.get("all_rate", 0) + 1,
+                    f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": user.get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
                 })
             
             await callback.answer("Спасибо за отзыв!")
