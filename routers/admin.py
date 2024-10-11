@@ -169,7 +169,7 @@ async def stats_message(stats, operators, message):
 👎 Отрицательных отзывов: {operator.get("minus_rate", 0)}
 
 ☀ Запросов за день: {operator.get("supports_day", 0)}
-📆 Запросов за месяц: {operator.get("supports_mouth", 0)}
+📆 Запросов за месяц: {operator.get("supports_month", 0)}
 📅 Всего запросов: {operator.get("all_supports", 0)}
     ➖➖➖➖➖➖➖➖➖"""
         
