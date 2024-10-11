@@ -2,8 +2,9 @@ from aiogram import Router, Bot
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from keyboards import rate_inline
+from keyboards import rate_inline, main_reply
 from routers.support import Wait
+from routers.start import WELCOME_MSG
 
 router = Router()
 
@@ -50,7 +51,7 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
         case "accept_rules":
             db.use_collection("users")
             db.update({"user_id": id}, {"level": 2})
-            await callback.answer("Вы приняли правила! Пропишите /start")
+            await send_message_to_user(bot, id, WELCOME_MSG, reply_markup=main_reply())
 
         case "reject":
             db.use_collection("supports")
@@ -118,11 +119,10 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
                         bot,
                         callback.from_user.id, 
                         """⭐ Оцените оператора
-    ➖➖➖➖➖➖➖➖
-    Поставьте оценку ниже\!
-    Слева направо, от 1 до 5
-    ➖➖➖➖➖➖➖➖
-    """,
+➖➖➖➖➖➖➖➖
+Поставьте оценку ниже\!
+Слева направо, от 1 до 5
+➖➖➖➖➖➖➖➖""",
                         reply_markup=rate_inline(current_support)
                     )
                     db.update({"user_id": callback.from_user.id}, {"current_support": 0})
@@ -149,7 +149,7 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
 
             if support_list:
                 support = support_list[0]
-                db.update({"user_id": support["operid"]}, {
+                db.update({"user_id": support.get("operid")}, {
                     "all_rate": support.get("all_rate", 0) + 1,
                     f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": support.get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
                 })
