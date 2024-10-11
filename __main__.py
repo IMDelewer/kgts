@@ -12,12 +12,13 @@ from routers import setup_routers
 
 def reset_supports(db):
     db.use_collection("users")
-    db.update({"level": 4}, {"$set": {"day_supports": 0}})
-
+    db.update({"level": 4}, {"day_supports": 0}, many=True)
+    db.update({"user_id": "stats"}, {"all_day_supports": 0})
 
 def reset_monthly_supports(db):
     db.use_collection("users")
-    db.update({"level": 4}, {"$set": {"mouth_supports": 0}})
+    db.update({"level": 4}, {"mouth_supports": 0}, many=True)
+    db.update({"user_id": "stats"}, {"all_mouth_supports": 0})
 
 def info_database(db):
 
