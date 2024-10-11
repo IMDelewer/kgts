@@ -58,10 +58,10 @@ async def start_handler(message: Message, bot: Bot):
     db = bot.db
     db.use_collection("users")
     
-    user = db.find({"user_id": message.from_user.id})
+    user = db.find({"user_id": message.from_user.id})[0]
 
     if user:
-        await check_user_subscription(message, bot, user["level"])
+        await check_user_subscription(message, bot, user.get("level", 0))
     else:
         db.insert({
             "username": message.from_user.username,
@@ -72,7 +72,7 @@ async def start_handler(message: Message, bot: Bot):
             "current_support": 0,
         })
         await check_user_subscription(message, bot, 0)
-        db.update({"user_id": "stats"}, {"$set": {"users": db.find({"user_id": "stats"})["users"]+1}})
+        db.update({"user_id": "stats"}, {"$set": {"users": db.find({"user_id": "stats"})[0].get("users")+1}})
 
 @router.message(Command(commands="admin"), IsAdmin())
 async def admin_handler(message: Message):

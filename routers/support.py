@@ -89,7 +89,7 @@ async def support_answer_handler(message: Message, state: FSMContext, bot: Bot):
     if support:
         await send_message_to_user(
             bot,
-            support["userid"],
+            support.get("userid", 0),
             answer_support(message.text),
             reply_markup=answer_inline(message.from_user.id)
         )
