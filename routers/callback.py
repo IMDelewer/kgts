@@ -146,25 +146,20 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
             db.use_collection("users")
             stats_data = db.find({"user_id": "stats"})
             stats_list = list(stats_data)
-
+            
+            db.use_collection("supports")
+            support_data = db.find({"id": id})
+            support_list = list(support_data)
+            
+            if support_list:
+                db.update({"user_id": support_list[0].get("operid")}, {
+                    "all_rate": support_list[0].get("all_rate", 0) + 1,
+                    f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": support_list[0].get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
+                })
             if stats_list:
                 db.update({"user_id": "stats"}, {
                     "all_rate": stats_list[0].get("all_rate", 0) + 1,
                     f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": stats_list[0].get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
-                })
-
-            db.use_collection("supports")
-            support_data = db.find({"id": id})
-            support_list = list(support_data)
-            support = support_list[0]
-
-            user_data = db.find({"user_id": support.get("operid")})
-            user_list = list(user_data)
-            if user_list:
-                user = user_list[0]
-                db.update({"user_id": user.get("user_id")}, {
-                    "all_rate": user.get("all_rate", 0) + 1,
-                    f"{'plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'}": user.get(('plus_rate' if rate_action in ['three_stars', 'four_stars', 'five_stars'] else 'minus_rate'), 0) + 1
                 })
             
             await callback.answer("Спасибо за отзыв!")
