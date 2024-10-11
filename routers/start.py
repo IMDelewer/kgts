@@ -69,7 +69,7 @@ async def start_handler(message: Message, bot: Bot):
         user = user_list[0]
         await check_user_subscription(message, bot, user.get("level", 0))
     else:
-        # Добавляем нового пользователя
+
         db.insert({
             "username": message.from_user.username,
             "user_id": message.from_user.id,
