@@ -49,7 +49,7 @@ async def check_user_subscription(message: Message, bot: Bot, user_level: int):
             db.update({"user_id": message.from_user.id}, {"level": 1})
             await message.answer("✔ Вы подписаны\! Пропишите /start")
         else:
-            await message.answer(SUBSCRIBE_MSG, reply_markup=subscribe_inline(None))
+            await message.answer(SUBSCRIBE_MSG, reply_markup=subscribe_inline(message.from_user.id))
     elif user_level == 1:
         await message.answer(RULES_MSG, reply_markup=rules_inline(message.from_user.id))
     elif user_level == 2:
