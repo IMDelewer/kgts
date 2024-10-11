@@ -57,15 +57,20 @@ class Database:
             self.logger.error(f"Failed to insert document: {e}")
             return None
 
-    def update(self, filter: dict, update: dict):
-        """Обновляем документы по фильтру."""
+    def update(self, filter: dict, update: dict, many: bool = False):
+        """Обновляем документы по фильтру. Если many=True, обновляем несколько документов, иначе один."""
         try:
-            result = self.current_collection.update_many(filter, {"$set": update})
+            if many:
+                result = self.current_collection.update_many(filter, {"$set": update})
+            else:
+                result = self.current_collection.update_one(filter, {"$set": update})
+            
             self.logger.info(f"Updated {result.modified_count} documents matching filter: {filter}")
             return result.modified_count
         except Exception as e:
             self.logger.error(f"Failed to update documents: {e}")
             return 0
+
     
     def delete(self, query: dict):
         """Удаляем документы по запросу."""
