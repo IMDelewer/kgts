@@ -53,6 +53,15 @@ async def callback_handler(callback: CallbackQuery, state: FSMContext, bot: Bot)
             db.update({"user_id": id}, {"level": 2})
             await send_message_to_user(bot, id, WELCOME_MSG, reply_markup=main_reply())
 
+        case "check_sub":
+            db = bot.db
+            db.use_collection("users")
+
+            user_status = await bot.get_chat_member(chat_id='-1002192731130', user_id=callback.from_user.id)
+            if user_status.status != 'left':
+                db.update({"user_id": callback.from_user.id}, {"level": 1})
+            else:
+                await callback.answer("❌ Вы не подписаны!")
         case "reject":
             db.use_collection("supports")
             support_data = db.find({"id": id})

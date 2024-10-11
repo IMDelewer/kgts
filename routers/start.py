@@ -39,14 +39,12 @@ RULES_MSG = """📕 *Правила пользования*
 Для подтверждения правил нажмите на кнопку ниже\. 👇
 ➖➖➖➖➖➖➖➖➖➖➖"""
 
-CHANNEL_ID = '-1002192731130'
-
 async def check_user_subscription(message: Message, bot: Bot, user_level: int):
     db = bot.db
     db.use_collection("users")
 
     if user_level == 0:
-        user_status = await bot.get_chat_member(chat_id=CHANNEL_ID, user_id=message.from_user.id)
+        user_status = await bot.get_chat_member(chat_id='-1002192731130', user_id=message.from_user.id)
         if user_status.status != 'left':
             db.update({"user_id": message.from_user.id}, {"level": 1})
         else:
