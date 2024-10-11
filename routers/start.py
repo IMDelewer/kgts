@@ -63,7 +63,7 @@ async def start_handler(message: Message, bot: Bot):
     user_list = list(user_data)
 
     stats_data = db.find({"user_id": "stats"})
-    stats_list = list(user_data)
+    stats_list = list(stats_data)
     
     if len(user_list) > 0:
         user = user_list[0]
@@ -79,8 +79,8 @@ async def start_handler(message: Message, bot: Bot):
             "current_support": 0,
         })
         await check_user_subscription(message, bot, 0)
-
-        db.update({"user_id": "stats"}, {"users": stats_list[0].get("users") + 1})
+        if len(stats_list) > 0:
+            db.update({"user_id": "stats"}, {"users": stats_list[0].get("users") + 1})
 
 @router.message(Command(commands="admin"), IsAdmin())
 async def admin_handler(message: Message):
